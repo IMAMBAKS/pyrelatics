@@ -106,7 +106,7 @@ def delete_data(username: str, password: str, company: str, environmentid: str, 
 
 
 def invoke_relatics_api_method_alpha(username: str, password: str, company: str, environmentid: str, workspaceid: str,
-                                     data_list: list, method: str, *args):
+                                     data_list: list, method: str):
     """
       :param str username: login username Relatics
       :param str password: password username Relatics
@@ -115,7 +115,6 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
       :param str workspaceid:  workspace ID
       :param list data_list: list of data
       :param str method: method name e.g. CreateInstanceElement
-      :param *args *args: arguments for specific method data
       :return: object from Relatics
       """
 
@@ -135,7 +134,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
     for element in data_list:
         xml = str.encode(
-            xml_definition.format(token, environmentid, workspaceid, *args))
+            xml_definition.format(token, environmentid, workspaceid, element))
         method_to_call = getattr(client.service, method)
         response = method_to_call(__inject={'msg': xml})
         print(response)
