@@ -1,6 +1,7 @@
 import base64, sys
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import re
 
 def validate_url(url):
     """
@@ -78,7 +79,8 @@ def filter_pre_string(_string: str, lines_to_cut: int):
     """
 
     filtered_array = _string.splitlines()[lines_to_cut:]
-    filtered_string = "\n".join(filtered_array)
+    filtered_string = "".join(filtered_array)
+    filtered_string = filtered_string.strip()
     return filtered_string
 
 # Helper function, unescaping HTML
@@ -96,5 +98,6 @@ def get_xml_for_method(method_url: str) -> str:
     html_doc = urlopen(method_url)
     bs_obj = BeautifulSoup(html_doc, 'html.parser')
     pre_string = unescape_html((bs_obj.find("pre").text))
-    xml_string = filter_pre_string(pre_string, 6)
+    xml_string = filter_pre_string(pre_string, 7)
+    xml_string = re.sub(r'(?<=>)\s*?(?=<)','', xml_string).strip()
     return xml_string

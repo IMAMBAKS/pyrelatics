@@ -1,4 +1,5 @@
 from suds.client import Client
+from lxml import etree
 
 from .xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
 from .utils import *
@@ -71,7 +72,7 @@ def send_data(company: str, workspace: str, operation: str, entry_code: str, dat
 
 
 def login_to_relatics(url: str, username: str, password: str) -> str:
-    client = Client(url, retxml=True)
+    client = Client(url)
     xml = str.encode(retrieve_token.format(Username=username, Password=password))
     response_login = client.service.Login(__inject={'msg': xml})
     return response_login
@@ -108,7 +109,7 @@ def delete_data(username: str, password: str, company: str, environmentid: str, 
 def invoke_relatics_api_method_alpha(username: str, password: str, company: str, environmentid: str, workspaceid: str,
                                      data_list: list, method: str):
     """
-      :param str username: login username Relatics
+      :param str username: loginq username Relatics
       :param str password: password username Relatics
       :param str company: company name
       :param str environmentid: environment ID
@@ -119,7 +120,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
       """
 
     # API method environment url
-    url_api = WSDL_URL[0] + company + WSDL_URL[2] + method
+    url_api = WSDL_URL[0] + company + WSDL_URL[3] + method
     validate_url(url_api)
 
     # WSDL environment url
@@ -130,11 +131,11 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
     # Retrieve XML method definition
     xml_definition = get_xml_for_method(url_api)
-    print(xml_definition)
 
     for element in data_list:
         xml = str.encode(
-            xml_definition.format(token, environmentid, workspaceid, element))
+            xml_definition.format(token, environmentid, workspaceid, element)
+        )
         method_to_call = getattr(client.service, method)
         response = method_to_call(__inject={'msg': xml})
         print(response)
