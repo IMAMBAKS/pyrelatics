@@ -39,8 +39,6 @@ def validate_url(url):
 
 
 
-
-
 def convert_dict_to_string(dict_row):
     """
     convert dictionary to an xml-like string
