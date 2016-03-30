@@ -1,5 +1,4 @@
 from suds.client import Client
-from lxml import etree
 
 from .xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
 from .utils import *
@@ -86,7 +85,6 @@ def delete_data(username: str, password: str, company: str, environmentid: str, 
     :param str environmentid: environment ID
     :param str workspaceid:  workspace ID
     :param list data_list: list of data
-    :param str type_of_data: property, relation or element
     :return: deleted object from Relatics
     """
 
@@ -133,9 +131,15 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
     xml_definition = get_xml_for_method(url_api)
 
     for element in data_list:
-        xml = str.encode(
-            xml_definition.format(token, environmentid, workspaceid, *element)
-        )
+        if isinstance(element, tuple):
+            xml = str.encode(
+                xml_definition.format(token, environmentid, workspaceid, *element)
+            )
+        else:
+            xml = str.encode(
+                xml_definition.format(token, environmentid, workspaceid, element)
+            )
+
         method_to_call = getattr(client.service, method)
         response = method_to_call(__inject={'msg': xml})
         print(response)
