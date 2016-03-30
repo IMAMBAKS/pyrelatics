@@ -1,13 +1,13 @@
-__author__ = 'imambaksr'
 import base64, sys
-
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
 
 def validate_url(url):
     """
     returns url if exist otherwise fails
 
     :param str url: the url
-    :return: company url or Error
+    :return: url or error
     """
 
     if sys.version_info.major == 2:
@@ -18,9 +18,9 @@ def validate_url(url):
             urllib2.urlopen(req)
             return url
         except urllib2.HTTPError as e:
-            return url, "couldn't be reached, please check the company: ", e.code
+            return url, "does not exist: ", e.code
         except urllib2.URLError as e:
-            return url, "couldn't be reached: ", e.reason
+            return url, "does not exist: ", e.reason
 
     else:
         import urllib.request
@@ -32,9 +32,9 @@ def validate_url(url):
             return url
 
         except urllib.request.HTTPError as e:
-            return url, "couldn't be reached, please check the company: ", e.code
+            return url, "does not exist: ", e.code
         except urllib.request.URLError as e:
-            return url, "couldn't be reached: ", e.reason
+            return url, "does not exist: ", e.reason
 
 
 
@@ -56,7 +56,7 @@ def convert_dict_to_string(dict_row):
         return "Input must be dictionary"
 
 
-def encode_data(non_encoded_data):
+def encode_data(non_encoded_data)->bytes:
     """
     converts data to a base64 string (python 2) and then to a UTF-8 string (python 3).
 
@@ -70,3 +70,31 @@ def encode_data(non_encoded_data):
         _data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
         _data = _data.decode(encoding='UTF-8')
         return _data
+
+
+def filter_pre_string(_string: str, lines_to_cut: int):
+    """
+    filter the xml
+    """
+
+    filtered_array = _string.splitlines()[lines_to_cut:]
+    filtered_string = "\n".join(filtered_array)
+    return filtered_string
+
+# Helper function, unescaping HTML
+def unescape_html(s: str) -> str:
+    s = s.replace('&lt;', '<')
+    s = s.replace('&gt;', '>')
+    s = s.replace('string', '{}')
+    return s
+
+# Get xml for method
+def get_xml_for_method(method_url: str) -> str:
+    """
+    get method specific xml data
+    """
+    html_doc = urlopen(method_url)
+    bs_obj = BeautifulSoup(html_doc, 'html.parser')
+    pre_string = unescape_html((bs_obj.find("pre").text))
+    xml_string = filter_pre_string(pre_string, 6)
+    return xml_string

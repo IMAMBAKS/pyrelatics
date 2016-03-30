@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='relatics_api',
     packages=['relatics_api'],
-    version='0.1.0',
+    version='0.1.2',
     description='Soap API for Relatics',
     author='Rashied Imambaks',
     author_email='r@imambaks.nl',
@@ -20,7 +20,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 

@@ -1,11 +1,13 @@
 from suds.client import Client
+
 from .xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
-from .utils import validate_url, encode_data, convert_dict_to_string
+from .utils import *
 
-WSDL_URL = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",)
+WSDL_URL = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",
+            ".relaticsonline.com/api/relaticsapi.asmx?op=")
 
 
-def read_data(company, workspace, operation, entry_code):
+def read_data(company: str, workspace: str, operation: str, entry_code: str) -> str:
     """
     retrieving data from Relatics
 
@@ -23,13 +25,13 @@ def read_data(company, workspace, operation, entry_code):
         xml = str.encode(retrieve_xml.format(Operation=operation, Workspace=workspace, Entrycode=entry_code))
 
         # Create a Client object & get response
-        client = Client(url)
+        client = Client(url, retxml=True)
         response = client.service.GetResult(__inject={'msg': xml})
 
         return response
 
 
-def send_data(company, workspace, operation, entry_code, data):
+def send_data(company: str, workspace: str, operation: str, entry_code: str, data) -> str:
     """
     import data into Relatics; create and update data
 
@@ -68,20 +70,22 @@ def send_data(company, workspace, operation, entry_code, data):
         return "data must be a dictionary"
 
 
-def login_to_relatics(url, username, password):
-    client = Client(url)
+def login_to_relatics(url: str, username: str, password: str) -> str:
+    client = Client(url, retxml=True)
     xml = str.encode(retrieve_token.format(Username=username, Password=password))
     response_login = client.service.Login(__inject={'msg': xml})
     return response_login
 
 
-def delete_data(username, password, company, environmentid, workspaceid, instanceid):
+def delete_data(username: str, password: str, company: str, environmentid: str, workspaceid: str, data_list: list):
     """
     :param str username: login username Relatics
     :param str password: password username Relatics
+    :param str company: company name
     :param str environmentid: environment ID
     :param str workspaceid:  workspace ID
-    :param str instanceid: id of object which should be deleted
+    :param list data_list: list of data
+    :param str type_of_data: property, relation or element
     :return: deleted object from Relatics
     """
 
@@ -89,12 +93,48 @@ def delete_data(username, password, company, environmentid, workspaceid, instanc
     url = WSDL_URL[0] + company + WSDL_URL[1]
     validate_url(url)
 
-    client = Client(url)
+    client = Client(url, retxml=True)
 
     token = login_to_relatics(url, username, password)
-    xml = str.encode(
-        remove_xml.format(Token=token, EnvironmentID=environmentid, WorkspaceID=workspaceid,
-                          InstanceElement=instanceid))
 
-    response = client.service.DeleteInstanceElement(__inject={'msg': xml})
-    return response
+    for element in data_list:
+        xml = str.encode(
+            remove_xml.format(Token=token, EnvironmentID=environmentid, WorkspaceID=workspaceid,
+                              InstanceElement=element))
+        response = client.service.DeleteInstanceElement(__inject={'msg': xml})
+        print(response)
+
+
+def invoke_relatics_api_method_alpha(username: str, password: str, company: str, environmentid: str, workspaceid: str,
+                                     data_list: list, method: str, *args):
+    """
+      :param str username: login username Relatics
+      :param str password: password username Relatics
+      :param str company: company name
+      :param str environmentid: environment ID
+      :param str workspaceid:  workspace ID
+      :param list data_list: list of data
+      :param str method: method name e.g. CreateInstanceElement
+      :param *args *args: arguments for specific method data
+      :return: object from Relatics
+      """
+
+    # API method environment url
+    url_api = WSDL_URL[0] + company + WSDL_URL[2] + method
+    validate_url(url_api)
+
+    # WSDL environment url
+    url = WSDL_URL[0] + company + WSDL_URL[1]
+    client = Client(url, retxml=True)
+    token = login_to_relatics(url, username, password)
+    validate_url(url)
+
+    # Retrieve XML method definition
+    xml_definition = get_xml_for_method(url_api)
+
+    for element in data_list:
+        xml = str.encode(
+            xml_definition.format(token, environmentid, workspaceid, *args))
+        method_to_call = getattr(client.service, method)
+        response = method_to_call(__inject={'msg': xml})
+        print(response)

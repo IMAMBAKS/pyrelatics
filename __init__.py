@@ -1,1 +1,1 @@
-__author__ = 'rimambaks'
+__author__ = 'Rashied Imambaks'

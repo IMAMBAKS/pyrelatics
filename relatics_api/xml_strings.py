@@ -78,3 +78,4 @@ remove_xml = """
         </SOAP-ENV:Body>
     </SOAP-ENV:Envelope>
 """
+
