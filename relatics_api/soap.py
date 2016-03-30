@@ -131,6 +131,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
     # Retrieve XML method definition
     xml_definition = get_xml_for_method(url_api)
+    print(xml_definition)
 
     for element in data_list:
         xml = str.encode(
