@@ -114,7 +114,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
       :param str company: company name
       :param str environmentid: environment ID
       :param str workspaceid:  workspace ID
-      :param list data_list: list of data
+      :param list data_list: list of tuples
       :param str method: method name e.g. CreateInstanceElement
       :return: object from Relatics
       """
@@ -134,7 +134,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
     for element in data_list:
         xml = str.encode(
-            xml_definition.format(token, environmentid, workspaceid, element)
+            xml_definition.format(token, environmentid, workspaceid, *element)
         )
         method_to_call = getattr(client.service, method)
         response = method_to_call(__inject={'msg': xml})
