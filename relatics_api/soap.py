@@ -107,39 +107,41 @@ def delete_data(username: str, password: str, company: str, environmentid: str, 
 def invoke_relatics_api_method_alpha(username: str, password: str, company: str, environmentid: str, workspaceid: str,
                                      data_list: list, method: str):
     """
-      :param str username: loginq username Relatics
-      :param str password: password username Relatics
-      :param str company: company name
-      :param str environmentid: environment ID
-      :param str workspaceid:  workspace ID
-      :param list data_list: list of tuples
-      :param str method: method name e.g. CreateInstanceElement
-      :return: object from Relatics
-      """
+    :param str username: loginq username Relatics
+    :param str password: password username Relatics
+    :param str company: company name
+    :param str environmentid: environment ID
+    :param str workspaceid:  workspace ID
+    :param list data_list: list of tup
+    :param str method: method name e.g. CreateInstanceElement
+    :return: object from Relatics
+    """
 
     # API method environment url
-    url_api = WSDL_URL[0] + company + WSDL_URL[3] + method
-    validate_url(url_api)
 
-    # WSDL environment url
-    url = WSDL_URL[0] + company + WSDL_URL[1]
-    client = Client(url, retxml=True)
-    token = login_to_relatics(url, username, password)
-    validate_url(url)
 
-    # Retrieve XML method definition
-    xml_definition = get_xml_for_method(url_api)
+url_api = WSDL_URL[0] + company + WSDL_URL[3] + method
+validate_url(url_api)
 
-    for element in data_list:
-        if isinstance(element, tuple):
-            xml = str.encode(
-                xml_definition.format(token, environmentid, workspaceid, *element)
-            )
-        else:
-            xml = str.encode(
-                xml_definition.format(token, environmentid, workspaceid, element)
-            )
+# WSDL environment url
+url = WSDL_URL[0] + company + WSDL_URL[1]
+client = Client(url, retxml=True)
+token = login_to_relatics(url, username, password)
+validate_url(url)
 
-        method_to_call = getattr(client.service, method)
-        response = method_to_call(__inject={'msg': xml})
-        print(response)
+# Retrieve XML method definition
+xml_definition = get_xml_for_method(url_api)
+
+for element in data_list:
+    if isinstance(element, tuple):
+        xml = str.encode(
+            xml_definition.format(token, environmentid, workspaceid, *element)
+        )
+    else:
+        xml = str.encode(
+            xml_definition.format(token, environmentid, workspaceid, element)
+        )
+
+    method_to_call = getattr(client.service, method)
+    response = method_to_call(__inject={'msg': xml})
+    print(response)
