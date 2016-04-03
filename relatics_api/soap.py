@@ -1,7 +1,9 @@
+from collections import abc
+
 from suds.client import Client
 
-from .xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
-from .utils import *
+from relatics_api.xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
+from relatics_api.utils import *
 
 WSDL_URL = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",
             ".relaticsonline.com/api/relaticsapi.asmx?op=")
@@ -133,7 +135,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
     xml_definition = get_xml_for_method(url_api)
 
     for element in data_list:
-        if isinstance(element, tuple):
+        if isinstance(element, abc.Sequence):
             xml = str.encode(
                 xml_definition.format(token, environmentid, workspaceid, *element)
             )
@@ -145,3 +147,32 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
         method_to_call = getattr(client.service, method)
         response = method_to_call(__inject={'msg': xml})
         print(response)
+
+
+class RelaticsSoapApi:
+
+    # TODO still need to implement an object
+
+    def __init__(self, username=None, password=None, company=None, environment_id=None, workspace_id=None):
+        self.url = WSDL_URL[0] + company + WSDL_URL[1]
+        self.token = login_to_relatics(self.url, username, password)
+        print(self.token)
+        self.client = Client(self.url, retxml=True)
+        self.__username = username
+        self.__password = password
+        self.__company = company
+        self.__environment_id = environment_id
+        self.__workspace_id = workspace_id
+
+    def __repr__(self):
+        return 'You called a RelaticsSoapApi Object'
+
+    def __getattr__(self, name):
+        return self.call_relatice_method(name)
+
+
+    def call_relatice_method(self, method):
+        method_to_call = getattr(self.client.service, method)
+        return method_to_call
+
+
