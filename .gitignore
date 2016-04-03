@@ -3,3 +3,4 @@ relatics_api/documentation_creation
 dist
 relatics_api.egg-info
 build
+*.ipynb

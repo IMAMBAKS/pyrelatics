@@ -149,14 +149,12 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
         print(response)
 
 
-class RelaticsSoapApi:
-
-    # TODO still need to implement an object
+class RelaticsAPI:
+    # TODO create class that simulates the RELATICS API
 
     def __init__(self, username=None, password=None, company=None, environment_id=None, workspace_id=None):
         self.url = WSDL_URL[0] + company + WSDL_URL[1]
         self.token = login_to_relatics(self.url, username, password)
-        print(self.token)
         self.client = Client(self.url, retxml=True)
         self.__username = username
         self.__password = password
@@ -170,9 +168,11 @@ class RelaticsSoapApi:
     def __getattr__(self, name):
         return self.call_relatice_method(name)
 
-
-    def call_relatice_method(self, method):
-        method_to_call = getattr(self.client.service, method)
-        return method_to_call
-
-
+    def call_relatice_method(self, method, *data):
+        self.url_api = WSDL_URL[0] + self.__company + WSDL_URL[3] + method
+        self.xml_definition = get_xml_for_method(self.url_api)
+        self.xml = str.encode(
+            self.xml_definition.format(self.token, self.environmentid, self.workspaceid, *data)
+        )
+        self.method_to_call = getattr(self.client.service, method)(__inject={'msg': self.xml})
+        return self.method_to_call
