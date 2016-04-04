@@ -148,7 +148,7 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
 
 class RelaticsAPI:
-	# Create __getattr__ hook on a metaclass.
+	# TODO Create __getattr__ hook on a metaclass.
 	"""
 	This class created an relatics API object (see ...relatics api for methods)
 	"""
