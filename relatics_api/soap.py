@@ -165,9 +165,6 @@ class RelaticsAPI:
 	def __repr__(self):
 		return 'You called a RelaticsApi Object; username: {}'.format(self.__username)
 
-	# def __getattr__(self, name):
-	#     return self.call_relatics_method(name)
-
 	def invoke_method(self, method, *data):
 		self.url_api = WSDL_URL[0] + self.company + WSDL_URL[3] + method
 		self.xml_definition = get_xml_for_method(self.url_api)

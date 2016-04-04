@@ -4,3 +4,4 @@ dist
 relatics_api.egg-info
 build
 *.ipynb
+.ipynb_checkpoints
