@@ -89,7 +89,6 @@ def unescape_html(s: str) -> str:
 	s = s.replace('string', '{}')
 	return s
 
-
 # Get xml for method
 def get_xml_for_method(method_url: str) -> str:
 	"""

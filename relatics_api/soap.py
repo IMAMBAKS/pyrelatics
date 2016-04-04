@@ -76,34 +76,6 @@ def login_to_relatics(url: str, username: str, password: str) -> str:
 	response_login = client.service.Login(__inject={'msg': xml})
 	return response_login
 
-
-def delete_data(username: str, password: str, company: str, environmentid: str, workspaceid: str, data_list: list):
-	"""
-	:param str username: login username Relatics
-	:param str password: password username Relatics
-	:param str company: company name
-	:param str environmentid: environment ID
-	:param str workspaceid:  workspace ID
-	:param list data_list: list of data
-	:return: deleted object from Relatics
-	"""
-
-	# WSDL environment url
-	url = WSDL_URL[0] + company + WSDL_URL[1]
-	validate_url(url)
-
-	client = Client(url, retxml=True)
-
-	token = login_to_relatics(url, username, password)
-
-	for element in data_list:
-		xml = str.encode(
-			remove_xml.format(Token=token, EnvironmentID=environmentid, WorkspaceID=workspaceid,
-			                  InstanceElement=element))
-		response = client.service.DeleteInstanceElement(__inject={'msg': xml})
-		print(response)
-
-
 def invoke_relatics_api_method_alpha(username: str, password: str, company: str, environmentid: str, workspaceid: str,
                                      data_list: list, method: str):
 	"""
@@ -163,7 +135,7 @@ class RelaticsAPI:
 		self.workspace_id = workspace_id
 
 	def __repr__(self):
-		return 'You called a RelaticsApi Object; username: {}'.format(self.__username)
+		return 'You called a RelaticsApi Object; username: {} \n company: {}'.format(self.__username, self.company)
 
 	def __getattr__(self, item):
 		self.method = item
