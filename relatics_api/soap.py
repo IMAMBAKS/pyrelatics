@@ -148,9 +148,8 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
 
 class RelaticsAPI:
-	# TODO Create __getattr__ hook on a metaclass.
 	"""
-	This class created an relatics API object (see ...relatics api for methods)
+	This class creates an object that simulates the Relatics API)
 	"""
 
 	def __init__(self, username=None, password=None, company=None, environment_id=None, workspace_id=None):
@@ -166,8 +165,13 @@ class RelaticsAPI:
 	def __repr__(self):
 		return 'You called a RelaticsApi Object; username: {}'.format(self.__username)
 
-	def invoke_method(self, method, data):
-		self.url_api = WSDL_URL[0] + self.company + WSDL_URL[3] + method
+	def __getattr__(self, item):
+		self.method = item
+		return self.invoke_method
+
+	def invoke_method(self, data):
+		self.url_api = WSDL_URL[0] + self.company + WSDL_URL[3] + self.method
+		print(self.url_api)
 		xml_definition = get_xml_for_method(self.url_api)
 		if isinstance(data, tuple):
 			self.xml = str.encode(
@@ -178,6 +182,7 @@ class RelaticsAPI:
 				xml_definition.format(self.token, self.environment_id, self.workspace_id, data)
 			)
 
-		method_to_call = getattr(self.client.service, method)
+		method_to_call = getattr(self.client.service, self.method)
 		self.response = method_to_call(__inject={'msg': self.xml})
 		return self.response
+
