@@ -155,7 +155,7 @@ class RelaticsAPI:
 	def __init__(self, username=None, password=None, company=None, environment_id=None, workspace_id=None):
 		self.url = WSDL_URL[0] + company + WSDL_URL[1]
 		self.token = login_to_relatics(self.url, username, password)
-		self.client = Client(self.url, retxml=True)
+		self.client = Client(self.url)
 		self.__username = username
 		self.__password = password
 		self.company = company
@@ -165,11 +165,18 @@ class RelaticsAPI:
 	def __repr__(self):
 		return 'You called a RelaticsApi Object; username: {}'.format(self.__username)
 
-	def invoke_method(self, method, *data):
+	def invoke_method(self, method, data):
 		self.url_api = WSDL_URL[0] + self.company + WSDL_URL[3] + method
-		self.xml_definition = get_xml_for_method(self.url_api)
-		self.xml = str.encode(
-			self.xml_definition.format(self.token, self.environmentid, self.workspaceid, *data)
-		)
-		self.method_to_call = getattr(self.client.service, method)(__inject={'msg': self.xml})
-		return self.method_to_call
+		xml_definition = get_xml_for_method(self.url_api)
+		if isinstance(data, tuple):
+			self.xml = str.encode(
+				xml_definition.format(self.token, self.environment_id, self.workspace_id, *data)
+			)
+		else:
+			self.xml = str.encode(
+				xml_definition.format(self.token, self.environment_id, self.workspace_id, data)
+			)
+
+		method_to_call = getattr(self.client.service, method)
+		self.response = method_to_call(__inject={'msg': self.xml})
+		return self.response
