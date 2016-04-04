@@ -166,9 +166,9 @@ class RelaticsAPI:
         return 'You called a RelaticsSoapApi Object'
 
     def __getattr__(self, name):
-        return self.call_relatice_method(name)
+        return self.call_relatics_method(name)
 
-    def call_relatice_method(self, method, *data):
+    def call_relatics_method(self, method, *data):
         self.url_api = WSDL_URL[0] + self.__company + WSDL_URL[3] + method
         self.xml_definition = get_xml_for_method(self.url_api)
         self.xml = str.encode(
