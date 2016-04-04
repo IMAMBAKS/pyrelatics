@@ -1,5 +1,3 @@
-from collections import abc
-
 from suds.client import Client
 
 from relatics_api.xml_strings import retrieve_xml, import_xml, retrieve_token, remove_xml
@@ -150,7 +148,10 @@ def invoke_relatics_api_method_alpha(username: str, password: str, company: str,
 
 
 class RelaticsAPI:
-	# TODO create class that simulates the RELATICS API
+	# Create __getattr__ hook on a metaclass.
+	"""
+	This class created an relatics API object (see ...relatics api for methods)
+	"""
 
 	def __init__(self, username=None, password=None, company=None, environment_id=None, workspace_id=None):
 		self.url = WSDL_URL[0] + company + WSDL_URL[1]
