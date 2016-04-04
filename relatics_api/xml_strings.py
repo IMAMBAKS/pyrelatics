@@ -62,20 +62,3 @@ retrieve_token = """
     </SOAP-ENV:Envelope>
 """
 
-remove_xml = """
-    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-        <SOAP-ENV:Header>
-            <m:Authentication xmlns:m="http://www.relatics.com/">
-                <m:Token>{Token}</m:Token>
-            </m:Authentication>
-        </SOAP-ENV:Header>
-        <SOAP-ENV:Body>
-            <m:DeleteInstanceElement xmlns:m="http://www.relatics.com/">
-                <m:EnvironmentID>{EnvironmentID}</m:EnvironmentID>
-                <m:WorkspaceID>{WorkspaceID}</m:WorkspaceID>
-                <m:InstanceElement>{InstanceElement}</m:InstanceElement>
-            </m:DeleteInstanceElement>
-        </SOAP-ENV:Body>
-    </SOAP-ENV:Envelope>
-"""
-
