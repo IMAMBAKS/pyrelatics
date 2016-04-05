@@ -1,6 +1,6 @@
 # relatics_api
 
-With this API a connection can be made with the Relatics database.
+With this API a connection can be made to the Relatics database.
 
 
 #### Example RelaticsAPI
