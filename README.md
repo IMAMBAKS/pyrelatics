@@ -5,8 +5,8 @@ With this API a connection can be made to the Relatics database.
 The following is supported:
 
    * [Invoke the RelaticsAPI](#example-relaticsapi)
-   * [Get data from relatics (webservice)](#example-get-data-from-relatics-db-(webservice))
-   * [Import data to relatics (webservice)](#example-import-data-to-relatics-db-(webservice))
+   * [Get data from relatics (webservice)](#example-get-data-from-relatics-db-webservice)
+   * [Import data to relatics (webservice)](#example-import-data-to-relatics-db-webservice)
 
 ### Example: RelaticsAPI ###
 
