@@ -7,7 +7,7 @@ WSDL_URL = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relat
             ".relaticsonline.com/api/relaticsapi.asmx?op=")
 
 
-def read_data(company_name: str, workspace: str, operation: str, entry_code: str) -> str:
+def read_data(company_name: str, workspace: str, operation: str, entry_code: str, retxml: bool = True) -> str:
     """
     retrieving data from Relatics
 
@@ -25,7 +25,7 @@ def read_data(company_name: str, workspace: str, operation: str, entry_code: str
         xml = str.encode(retrieve_xml.format(Operation=operation, Workspace=workspace, Entrycode=entry_code))
 
         # Create a Client object & get response
-        client = Client(url, retxml=True)
+        client = Client(url, retxml=retxml)
         response = client.service.GetResult(__inject={'msg': xml})
 
         return response
@@ -82,7 +82,8 @@ class RelaticsAPI:
     This class creates an object that simulates the Relatics API)
     """
 
-    def __init__(self, username=None, password=None, company_name=None, environment_id=None, workspace_id=None):
+    def __init__(self, username: str, password: str, company_name: str, environment_id: str,
+                 workspace_id: str):
         self.url = WSDL_URL[0] + company_name + WSDL_URL[1]
         self.token = login_to_relatics(self.url, username, password)
         self.client = Client(self.url)
