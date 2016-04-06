@@ -1,6 +1,5 @@
 from suds.client import Client
 
-from relatics_api.xml_strings import retrieve_xml, retrieve_token
 from relatics_api.utils import *
 
 WSDL_URL = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",
