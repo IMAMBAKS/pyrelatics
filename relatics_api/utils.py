@@ -2,6 +2,7 @@ import base64, sys
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import re
+from collections import namedtuple
 
 
 def validate_url(url):
@@ -12,7 +13,6 @@ def validate_url(url):
 	:return: url or error
 	"""
 
-
 	import urllib.request
 	import urllib.error
 	req = urllib.request.Request(url)
@@ -22,7 +22,7 @@ def validate_url(url):
 	except urllib.request.HTTPError as e:
 		return url, "does not exist: ", e.code
 	except urllib.request.URLError as e:
-			return url, "does not exist: ", e.reason
+		return url, "does not exist: ", e.reason
 
 
 def convert_dict_to_string(dict_row):
@@ -76,6 +76,7 @@ def unescape_html(s: str) -> str:
 	s = s.replace('>xml<', '>{}<')
 	return s
 
+
 # Get xml for method
 def get_xml_for_method(method_url: str) -> str:
 	"""
@@ -88,7 +89,21 @@ def get_xml_for_method(method_url: str) -> str:
 	xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
 	return xml_string
 
+
 # TODO write functions to transform parameters in the form of  e.g. <Workspace>..</Workspace> etc.
+
+
+def create_parameter_xml(data):
+	parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
+	total_string = ''
+	if isinstance(data, list):
+		for parameter in data:
+			total_string += parameter_xml_string.format(parameter[0], parameter[1])
+	else:
+		total_string += parameter_xml_string.format(data[0], data[1])
+
+	return total_string
+
 
 
 class RelaticsException(PermissionError):

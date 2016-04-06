@@ -77,9 +77,12 @@ class RelaticsAPI:
 		if validate_url(method_url):
 			# Sending read xml and encode byte to string
 			xml_filled_in = xml_definition.format(operation_name,
-			                                      '<Identification><Workspace>' + self.workspace_id + '</Workspace></Identification>',
-			                                      '<Parameters>' + parameters + '</Parameters>',
-			                                      '<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>')
+
+			'<Identification><Workspace>' + self.workspace_id + '</Workspace></Identification>',
+
+			'<Parameters>' + create_parameter_xml(parameters) + '</Parameters>',
+
+			'<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>')
 
 			xml = str.encode(xml_filled_in)
 
