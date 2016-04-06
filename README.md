@@ -16,8 +16,11 @@ The following is supported:
     from relatics_api.soap import RelaticsAPI
 
 
-    relaticsapi = RelaticsAPI(username: str, password: str, company_name: str, environment_id: str,
+    relaticsapi = RelaticsAPI(company_name: str, environment_id: str,
                  workspace_id: str)
+                 
+    # first login
+    relaticeapi.login(username:str, password:str)
 
     result = relaticsapi.CreateInstanceElement(CoR).Element.ID
     relaticsapi.UpdateInstanceElement(result,'name', 'nameOfResult')
