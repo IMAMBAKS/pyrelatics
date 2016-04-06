@@ -12,30 +12,16 @@ def validate_url(url):
 	:return: url or error
 	"""
 
-	if sys.version_info.major == 2:
-		import urllib2
 
-		req = urllib2.Request(url)
-		try:
-			urllib2.urlopen(req)
-			return url
-		except urllib2.HTTPError as e:
-			return url, "does not exist: ", e.code
-		except urllib2.URLError as e:
-			return url, "does not exist: ", e.reason
-
-	else:
-		import urllib.request
-		import urllib.error
-
-		req = urllib.request.Request(url)
-		try:
-			urllib.request.urlopen(req)
-			return url
-
-		except urllib.request.HTTPError as e:
-			return url, "does not exist: ", e.code
-		except urllib.request.URLError as e:
+	import urllib.request
+	import urllib.error
+	req = urllib.request.Request(url)
+	try:
+		urllib.request.urlopen(req)
+		return url
+	except urllib.request.HTTPError as e:
+		return url, "does not exist: ", e.code
+	except urllib.request.URLError as e:
 			return url, "does not exist: ", e.reason
 
 
@@ -43,7 +29,7 @@ def convert_dict_to_string(dict_row):
 	"""
 	convert dictionary to an xml-like string
 
-	:param dict dictRow: dictionary of items
+	:param dict dict_row: dictionary of items
 	:return: string row
 	"""
 	if type(dict_row) == dict:
@@ -101,6 +87,8 @@ def get_xml_for_method(method_url: str) -> str:
 	xml_string = filter_pre_string(pre_string, 7)
 	xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
 	return xml_string
+
+# TODO write functions to transform parameters in the form of  e.g. <Workspace>..</Workspace> etc.
 
 
 class RelaticsException(PermissionError):

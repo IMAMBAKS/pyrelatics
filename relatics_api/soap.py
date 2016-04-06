@@ -39,7 +39,6 @@ class RelaticsAPI:
 	def invoke_method(self, data):
 
 		url_method = WSDL_URL[0] + self.company_name + WSDL_URL[3] + self.method
-		print(url_method)
 
 		if self.token is not None:
 			xml_definition = get_xml_for_method(url_method)
@@ -58,29 +57,32 @@ class RelaticsAPI:
 		self.response = method_to_call(__inject={'msg': self.xml})
 		return self.response
 
-	def read_data(self, operation_name: str, entry_code: str, retxml: bool = True) -> str:
+	def read_data(self, operation_name: str, entry_code: str, parameters: str = 'None', retxml: bool = True) -> str:
 		"""
 		retrieving data from Relatics
 
-
-		:param str company_name: The company_name
-		:param str operation: The operation name of the webservice
-		:param str workspace: The workspace ID
+		:param str operation_name: The operation name of the webservice
 		:param str entry_code: The entry-code of the webservice
+
 		:return: soap data object
 		"""
 
 		method_url = WSDL_URL[0] + self.company_name + WSDL_URL[2]
 		# TODO print the exact data url.
-		# url__method =  WSDL_URL[0] + self.company_name + WSDL_URL[4]
-		# print(url__method)
-		# print(get_xml_for_method(url__method))
+		url__method = WSDL_URL[0] + self.company_name + WSDL_URL[4]
+		xml_definition = get_xml_for_method(url__method)
+		print(xml_definition)
 		client = Client(method_url, retxml=retxml)
 
 		if validate_url(method_url):
 			# Sending read xml and encode byte to string
-			xml = str.encode(
-				retrieve_xml.format(Operation=operation_name, Workspace=self.workspace_id, Entrycode=entry_code))
+			xml_filled_in = xml_definition.format(operation_name,
+			                                      '<Identification><Workspace>' + self.workspace_id + '</Workspace></Identification>',
+			                                      '<Parameters>' + parameters + '</Parameters>',
+			                                      '<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>')
+
+			xml = str.encode(xml_filled_in)
+
 			# Create a Client object & get response
 			response = client.service.GetResult(__inject={'msg': xml})
 			return response
