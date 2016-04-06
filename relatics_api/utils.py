@@ -102,5 +102,5 @@ def get_xml_for_method(method_url: str) -> str:
 	return xml_string
 
 
-class RelaticsException(AttributeError):
+class RelaticsException(PermissionError):
 	pass
