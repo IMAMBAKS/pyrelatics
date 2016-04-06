@@ -87,6 +87,7 @@ def unescape_html(s: str) -> str:
 	s = s.replace('&lt;', '<')
 	s = s.replace('&gt;', '>')
 	s = s.replace('string', '{}')
+	s = s.replace('>xml<', '>{}<')
 	return s
 
 # Get xml for method
