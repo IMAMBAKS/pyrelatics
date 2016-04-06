@@ -21,20 +21,21 @@ class RelaticsAPI:
 		self.environment_id = environment_id
 		self.workspace_id = workspace_id
 
-	def login(self, username: str, password: str) -> str:
-		client = Client(self.url)
-		xml = str.encode(retrieve_token.format(Username=username, Password=password))
-		response_login = client.service.Login(__inject={'msg': xml})
-		self.token = response_login
-		print(self.token)
-		return response_login
-
 	def __repr__(self):
 		return 'You called a RelaticsApi Object'
 
 	def __getattr__(self, item):
 		self.method = item
 		return self.invoke_method
+
+	def login(self, username: str, password: str) -> str:
+		client = Client(self.url)
+		url_method = WSDL_URL[0] + self.company_name + WSDL_URL[3] + 'Login'
+		xml_definition = get_xml_for_method(url_method)
+		xml = str.encode(xml_definition.format(username, password))
+		response_login = client.service.Login(__inject={'msg': xml})
+		self.token = response_login
+		return self.token
 
 	def invoke_method(self, data):
 
