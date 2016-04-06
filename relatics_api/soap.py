@@ -11,8 +11,7 @@ class RelaticsAPI:
 	This class creates an object that simulates the Relatics API)
 	"""
 
-	def __init__(self, company_name: str, environment_id: str,
-	             workspace_id: str):
+	def __init__(self, company_name: str, environment_id: str, workspace_id: str):
 		self.token = None
 		self.url = WSDL_URL[0] + company_name + WSDL_URL[1]
 		self.client = Client(self.url)
@@ -27,8 +26,8 @@ class RelaticsAPI:
 		self.method = item
 		return self.invoke_method
 
-	def login(self, username: str, password: str) -> str:
-		client = Client(self.url)
+	def login(self, username: str, password: str, retxml: bool = False) -> str:
+		client = Client(self.url, retxml=retxml)
 		url_method = WSDL_URL[0] + self.company_name + WSDL_URL[3] + 'Login'
 		xml_definition = get_xml_for_method(url_method)
 		xml = str.encode(xml_definition.format(username, password))
@@ -43,26 +42,28 @@ class RelaticsAPI:
 		if self.token is not None:
 			xml_definition = get_xml_for_method(url_method)
 			if isinstance(data, tuple):
-				self.xml = str.encode(
+				xml = str.encode(
 					xml_definition.format(self.token, self.environment_id, self.workspace_id, *data)
 				)
 			else:
-				self.xml = str.encode(
+				xml = str.encode(
 					xml_definition.format(self.token, self.environment_id, self.workspace_id, data)
 				)
 		else:
 			raise RelaticsException('Please login first by calling ().login(username,password)')
 
 		method_to_call = getattr(self.client.service, self.method)
-		self.response = method_to_call(__inject={'msg': self.xml})
-		return self.response
+		response = method_to_call(__inject={'msg': xml})
+		return response
 
-	def read_data(self, operation_name: str, entry_code: str, parameters: str = 'None', retxml: bool = True) -> str:
+	def read_data(self, operation_name: str, entry_code: str, parameters: str = 'None', retxml: bool = False) -> str:
 		"""
 		retrieving data from Relatics
 
 		:param str operation_name: The operation name of the webservice
 		:param str entry_code: The entry-code of the webservice
+		:param tuple parameters: provide a list of tuples if there are more parameters
+		:param str retxml: If True return xml, otherwise return Object. default: false
 
 		:return: soap data object
 		"""
@@ -78,11 +79,11 @@ class RelaticsAPI:
 			# Sending read xml and encode byte to string
 			xml_filled_in = xml_definition.format(operation_name,
 
-			'<Identification><Workspace>' + self.workspace_id + '</Workspace></Identification>',
+			                                      '<Identification><Workspace>' + self.workspace_id + '</Workspace></Identification>',
 
-			'<Parameters>' + create_parameter_xml(parameters) + '</Parameters>',
+			                                      '<Parameters>' + create_parameter_xml(parameters) + '</Parameters>',
 
-			'<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>')
+			                                      '<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>')
 
 			xml = str.encode(xml_filled_in)
 

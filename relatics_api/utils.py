@@ -1,8 +1,8 @@
-import base64, sys
+import base64
 from bs4 import BeautifulSoup
+import urllib.request
 from urllib.request import urlopen
 import re
-from collections import namedtuple
 
 
 def validate_url(url):
@@ -13,8 +13,6 @@ def validate_url(url):
 	:return: url or error
 	"""
 
-	import urllib.request
-	import urllib.error
 	req = urllib.request.Request(url)
 	try:
 		urllib.request.urlopen(req)
@@ -43,18 +41,15 @@ def convert_dict_to_string(dict_row):
 
 def encode_data(non_encoded_data) -> bytes:
 	"""
-	converts data to a base64 string (python 2) and then to a UTF-8 string (python 3).
+	encode a UTF-8 string (python 3).
 
 	:param str non_encoded_data: The non encoded data.
 	:return: encoded_data object
 	"""
-	if sys.version_info.major == 2:
-		_data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
-		return _data
-	else:
-		_data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
-		_data = _data.decode(encoding='UTF-8')
-		return _data
+
+	data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
+	data = data.decode(encoding='UTF-8')
+	return data
 
 
 def filter_pre_string(_string: str, lines_to_cut: int):
@@ -84,13 +79,10 @@ def get_xml_for_method(method_url: str) -> str:
 	"""
 	html_doc = urlopen(method_url)
 	bs_obj = BeautifulSoup(html_doc, 'html.parser')
-	pre_string = unescape_html((bs_obj.find("pre").text))
+	pre_string = unescape_html(bs_obj.find("pre").text)
 	xml_string = filter_pre_string(pre_string, 7)
 	xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
 	return xml_string
-
-
-# TODO write functions to transform parameters in the form of  e.g. <Workspace>..</Workspace> etc.
 
 
 def create_parameter_xml(data):
@@ -104,6 +96,18 @@ def create_parameter_xml(data):
 
 	return total_string
 
+
+# TODO write functions to transform parameters in the form of  e.g. <Workspace>..</Workspace> etc.
+# def create_row_xml(data):
+# 	parameter_xml_string = '<Row Name="{}" Value="{}" />'
+# 	total_string = ''
+# 	if isinstance(data, list):
+# 		for parameter in data:
+# 			total_string += parameter_xml_string.format(parameter[0], parameter[1])
+# 	else:
+# 		total_string += parameter_xml_string.format(data[0], data[1])
+#
+# 	return total_string
 
 
 class RelaticsException(PermissionError):
