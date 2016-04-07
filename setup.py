@@ -3,13 +3,14 @@ from distutils.core import setup
 setup(
     name='relatics_api',
     packages=['relatics_api'],
-    version='0.1.3',
-    description='Soap API for Relatics',
+    version='0.1.5',
+    install_requires=['beautifulsoup4>=4', 'suds-jurko==0.6'],
+    description='API for Relatics connections',
     author='Rashied Imambaks',
     author_email='r@imambaks.nl',
     url='https://github.com/IMAMBAKS/relatics_api',
     license='MIT',
-    keywords=['relatics', 'SOAP'],
+    keywords=['relatics', 'SOAP', 'API', 'DB'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',

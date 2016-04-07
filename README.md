@@ -1,12 +1,12 @@
-# relatics_api
+# Relatics_api
 
 With this API a connection can be made to the Relatics database.
 
-The following is supported:
+# Changelog
 
-   * [Invoke the RelaticsAPI](#example-relaticsapi)
-   * [Get data from relatics (webservice)](#example-get-data-from-relatics-db-webservice)
-   * [Import data to relatics (webservice)](#example-import-data-to-relatics-db-webservice)
+- **Version: 0.15**
+    - Python 2 support deprecated
+    
 
 ### Example: RelaticsAPI ###
 
@@ -31,26 +31,27 @@ The following is supported:
     relaticsapi.CreateInstanceRelation((R1, R2, Relation))
 ```
 
-For all methods see the SOAP API in the knowledge base.
 
-### Example: Get data from relatics db (webservice)
 
+
+<b>Get data from relatics db (webservice)</b>
 ```python
-    from relatics_api.soap import read_data
-
-
-    read_data(company_name: str, workspace: str, operation: str, entry_code: str, retxml: bool = True)
+    
+    relaticsapi.GetResult(self, operation_name: str, entry_code: str, parameters: str = 'None', retxml: bool = False) -> object
 
 
 ```
 
-### Example: Import data to relatics db (webservice)
 
+<b>Import data to relatics db (webservice)</b>
 ```python
     from relatics_api.soap import import_data
 
 
-    import_data(company_name: str, workspace: str, operation: str, entry_code: str, data)
+    relaticsapi.Import(operation_name: str, entry_code: str, data: Sequence[Mapping], retxml=False) -> object
 
 
 ```
+
+
+For all methods see the SOAP API in the knowledge base

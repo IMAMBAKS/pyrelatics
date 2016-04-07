@@ -1,114 +1,125 @@
 import base64
-from bs4 import BeautifulSoup
-import urllib.request
-from urllib.request import urlopen
 import re
+import urllib.request
+from functools import lru_cache
+from typing import List, Dict, TypeVar
+from urllib.request import urlopen
+
+from bs4 import BeautifulSoup
+
+# Typings
+TYPINGS_ROW = TypeVar('TYPINGS_ROW', dict, List[dict])
+TYPINGS_PARAMETER = TypeVar('TYPINGS_PARAMETER', tuple, List[tuple])
 
 
-def validate_url(url):
-	"""
-	returns url if exist otherwise fails
+def validate_url(url: str):
+    """
+    Returns url if exist otherwise fails
 
-	:param str url: the url
-	:return: url or error
-	"""
+    :param str url: the url
+    :return: url or error
+    """
 
-	req = urllib.request.Request(url)
-	try:
-		urllib.request.urlopen(req)
-		return url
-	except urllib.request.HTTPError as e:
-		return url, "does not exist: ", e.code
-	except urllib.request.URLError as e:
-		return url, "does not exist: ", e.reason
-
-
-def convert_dict_to_string(dict_row):
-	"""
-	convert dictionary to an xml-like string
-
-	:param dict dict_row: dictionary of items
-	:return: string row
-	"""
-	if type(dict_row) == dict:
-
-		dict_items = ' '.join(["{k}='{v}'".format(k=key, v=value) for (key, value) in dict_row.items()])
-		xml_row = ('<Row ' + dict_items + '></Row>')
-		return xml_row
-	else:
-		return "Input must be dictionary"
+    req = urllib.request.Request(url)
+    try:
+        urllib.request.urlopen(req)
+        return url
+    except urllib.request.HTTPError as e:
+        return url, "does not exist: ", e.code
+    except urllib.request.URLError as e:
+        return url, "does not exist: ", e.reason
 
 
-def encode_data(non_encoded_data) -> bytes:
-	"""
-	encode a UTF-8 string (python 3).
+def encode_data(non_encoded_data: str) -> str:
+    """
+    Encode a UTF-8 string.
 
-	:param str non_encoded_data: The non encoded data.
-	:return: encoded_data object
-	"""
-
-	data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
-	data = data.decode(encoding='UTF-8')
-	return data
+    :param str non_encoded_data: The non encoded data.
+    :return: encoded_data object
+    """
+    data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
+    data = data.decode(encoding='UTF-8')
+    return data
 
 
 def filter_pre_string(_string: str, lines_to_cut: int):
-	"""
-	filter the xml
-	"""
+    """
+    Filter the xml out of html
+    """
 
-	filtered_array = _string.splitlines()[lines_to_cut:]
-	filtered_string = "".join(filtered_array)
-	filtered_string = filtered_string.strip()
-	return filtered_string
+    filtered_array = _string.splitlines()[lines_to_cut:]
+    filtered_string = "".join(filtered_array)
+    filtered_string = filtered_string.strip()
+    return filtered_string
 
 
-# Helper function, unescaping HTML
 def unescape_html(s: str) -> str:
-	s = s.replace('&lt;', '<')
-	s = s.replace('&gt;', '>')
-	s = s.replace('string', '{}')
-	s = s.replace('>xml<', '>{}<')
-	return s
+    """
+    Unescape html
+
+    :param s str: create doc string
+    :return: replaced string
+    """
+    s = s.replace('&lt;', '<')
+    s = s.replace('&gt;', '>')
+    s = s.replace('string', '{}')
+    s = s.replace('>xml<', '>{}<')
+    return s
 
 
-# Get xml for method
+@lru_cache()
 def get_xml_for_method(method_url: str) -> str:
-	"""
-	get method specific xml data
-	"""
-	html_doc = urlopen(method_url)
-	bs_obj = BeautifulSoup(html_doc, 'html.parser')
-	pre_string = unescape_html(bs_obj.find("pre").text)
-	xml_string = filter_pre_string(pre_string, 7)
-	xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
-	return xml_string
+    """
+    Get xml for specific method
+    """
+    html_doc = urlopen(method_url)
+    bs_obj = BeautifulSoup(html_doc, 'html.parser')
+    pre_string = unescape_html(bs_obj.find("pre").text)
+    xml_string = filter_pre_string(pre_string, 7)
+    xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
+    return xml_string
 
 
-def create_parameter_xml(data):
-	parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
-	total_string = ''
-	if isinstance(data, list):
-		for parameter in data:
-			total_string += parameter_xml_string.format(parameter[0], parameter[1])
-	else:
-		total_string += parameter_xml_string.format(data[0], data[1])
+def create_parameter_xml(data: TYPINGS_PARAMETER) -> str:
+    """
 
-	return total_string
+    :param data Sequence[tuple]: [{}]
+    :return:
+    """
+    parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
+    total_string = ''
+    if isinstance(data, list):
+        for parameter in data:
+            total_string += parameter_xml_string.format(parameter[0], parameter[1])
+    else:
+        total_string += parameter_xml_string.format(data[0], data[1])
+
+    return total_string
 
 
-# TODO write functions to transform parameters in the form of  e.g. <Workspace>..</Workspace> etc.
-# def create_row_xml(data):
-# 	parameter_xml_string = '<Row Name="{}" Value="{}" />'
-# 	total_string = ''
-# 	if isinstance(data, list):
-# 		for parameter in data:
-# 			total_string += parameter_xml_string.format(parameter[0], parameter[1])
-# 	else:
-# 		total_string += parameter_xml_string.format(data[0], data[1])
-#
-# 	return total_string
+def create_row_xml(data: TYPINGS_ROW):
+    total_string = ''
+
+    if isinstance(data, List[Dict]):
+        for item in data:
+            xml_string = '<Row'
+            for key, value in item.items():
+                xml_string += ' {}="{}"'.format(key, value)
+            xml_string += '></Row>'
+            total_string += xml_string
+
+        return total_string
+    elif isinstance(data, Dict):
+        xml_string = '<Row'
+        for key, value in data.items():
+            xml_string += ' {}="{}"'.format(key, value)
+        xml_string += '></Row>'
+        total_string += xml_string
+    else:
+        raise TypeError('Please provide a dict or list of dicts')
+
+    return total_string
 
 
 class RelaticsException(PermissionError):
-	pass
+    pass
