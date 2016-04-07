@@ -98,23 +98,25 @@ def create_parameter_xml(data: TYPINGS_PARAMETER) -> str:
 
 
 def create_row_xml(data: TYPINGS_ROW):
-    total_string = ''
+    total_string = '<Import>'
 
     if isinstance(data, List[Dict]):
         for item in data:
             xml_string = '<Row'
             for key, value in item.items():
                 xml_string += ' {}="{}"'.format(key, value)
-            xml_string += '></Row>'
+            xml_string += '/>'
             total_string += xml_string
 
+        total_string += '</Import>'
         return total_string
     elif isinstance(data, Dict):
         xml_string = '<Row'
         for key, value in data.items():
             xml_string += ' {}="{}"'.format(key, value)
-        xml_string += '></Row>'
+        xml_string += '/>'
         total_string += xml_string
+        total_string += '</Import>'
     else:
         raise TypeError('Please provide a dict or list of dicts')
 

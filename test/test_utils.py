@@ -24,12 +24,13 @@ def test_create_parameter_xml():
 
 def test_create_row_xml_raise_type_error():
     with pytest.raises(TypeError):
-        assert create_row_xml(('test', 'test2')) == '<Row test="test2"></Row>'
+        assert create_row_xml(('test', 'test2')) == '<Row test="test2"/>'
 
 
 def test_create_row_xml():
-    assert create_row_xml({'test': 'test2'}) == '<Row test="test2"></Row>'
-    assert create_row_xml([{'test': 'test2'}]) == '<Row test="test2"></Row>'
+    assert create_row_xml({'test': 'test2'}) == '<Import><Row test="test2"/></Import>'
+    assert create_row_xml(
+        [{'test': 'test2'}, {'test': 'test4'}]) == '<Import><Row test="test2"/><Row test="test4"/></Import>'
 
 
 def test_encode_data_returns_byte():

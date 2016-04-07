@@ -116,6 +116,7 @@ class RelaticsAPI:
                                                   '<Authentication><Entrycode>' + entry_code + '</Entrycode></Authentication>',
                                                   'import_data.xml',
                                                   encode_data(create_row_xml(data)))
+
             xml = str.encode(xml_filled_in)
             response = client.service.Import(__inject={'msg': xml})
             return response
