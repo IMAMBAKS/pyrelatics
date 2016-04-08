@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='pyrelatics',
     packages=['pyrelatics'],
-    version='0.1.5',
+    version='0.20',
     install_requires=['beautifulsoup4>=4', 'suds-jurko==0.6'],
     description='API for Relatics connections',
     author='Rashied Imambaks',

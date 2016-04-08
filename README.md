@@ -1,58 +1,70 @@
-# Relatics_api
+# PyRelatics
 
 With this API a connection can be made to the Relatics database.
 
-# Changelog
+## Changelog
 
-- **Version: 0.15**
-    - Python 2 support deprecated
-    - 100% test coverage
-    - 
-    
+**Version 0.20:**
 
-### Example: RelaticsAPI ###
+- Rename package to PyRelatics
+- 100% test coverage 
+- Python 3+ only
+   
+   
+## Examples
 
-<b>Create Instance and update name</b>
-
+**1. Get data (webservice)**
 ```python
-    from relatics_api.soap import RelaticsAPI
+from pyrelatics import RelaticsAPI
 
+# Create a RelaticeAPI instance (prime connection)
+relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
 
-    relaticsapi = RelaticsAPI('')
-                 
-    # first login
-    relaticeapi.login(username:str, password:str)
+# Prepare parameters
+parameters=('dummy_parameter_name','dummy_parameter_value')
 
-    result = relaticsapi.CreateInstanceElement(CoR).Element.ID
-    relaticsapi.UpdateInstanceElement(result,'name', 'nameOfResult')
+# Get data (if there are no parameters don't pass it to the function)
+relaticsapi.GetResult('dummy_operation_name', 'dummy_entry_code', parameters=parameters)
 ```
 
-<b>Create instance relation</b>
+**2. Create Instance Element, Update name and Create relation**
+
 ```python
-    relaticsapi.CreateInstanceRelation((R1, R2, Relation))
+from pyrelatics import RelaticsAPI
+
+# Create a RelaticeAPI instance (prime connection)
+relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
+              
+# Login to your environment
+relaticsapi.login('username', 'password')
+ 
+# Create element and update it's name
+cor_element = 'dummy_element_ID'
+result = relaticsapi.CreateInstanceElement(cor_element).Element.ID
+relaticsapi.UpdateInstanceElement(result,'name', 'nameOfResult')
+ 
+R1=result
+R2='dummy_R2'
+Relation = 'dummy_relation'
+relaticsapi.CreateInstanceRelation((R1, R2, Relation))
 ```
 
 
+**3. Import data (webservice)**
 
-
-<b>Get data from relatics db (webservice)</b>
 ```python
-    
-    relaticsapi.GetResult(self, operation_name: str, entry_code: str, parameters: str = 'None', retxml: bool = False) -> object
+from pyrelatics import RelaticsAPI
 
+# Create a RelaticeAPI instance (prime connection)
+relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
 
+# Prepare data
+data= [{'name': 'test', 'description':'descrtest'},{'name': 'test2', 'description':'descrtest2'}]
+
+# Import data
+relaticsapi.Import('dummy_operation_name','dummy_entry_code', data=data)
 ```
 
-
-<b>Import data to relatics db (webservice)</b>
-```python
-    from relatics_api.soap import import_data
-
-
-    relaticsapi.Import(operation_name: str, entry_code: str, data: Sequence[Mapping], retxml=False) -> object
-
-
-```
 
 
 For all methods see the SOAP API in the knowledge base
