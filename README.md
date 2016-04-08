@@ -18,8 +18,7 @@ With this API a connection can be made to the Relatics database.
     from relatics_api.soap import RelaticsAPI
 
 
-    relaticsapi = RelaticsAPI(company_name: str, environment_id: str,
-                 workspace_id: str)
+    relaticsapi = RelaticsAPI('')
                  
     # first login
     relaticeapi.login(username:str, password:str)
