@@ -5,7 +5,7 @@ from pyrelatics.client import *
 
 def test_relaticsapi_raise_exception_with_dummy_url():
     with pytest.raises(URLError):
-        relaticsapi = RelaticsAPI('dummy_company', 'dummy_env_id', 'dummy_wid')
+        RelaticsAPI('dummy_company', 'dummy_env_id', 'dummy_wid')
 
 
 def test_relaticsapi_initializes_properties():
