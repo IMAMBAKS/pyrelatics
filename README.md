@@ -1,33 +1,50 @@
 # PyRelatics
 
-With this API a connection can be made to the Relatics database.
+PyRelatics an API for Relatics DB connection. 
 
-## Changelog
+# Installation
 
-**Version 0.20:**
+Install via pip:
 
-- Rename package to PyRelatics
-- 100% test coverage 
-- Python 3+ only
+    pip install pyrelatics
+
+# Getting started
+PyRelatics allows you to get data from Relatics,
+import data into relatics and invoke relatics_api methods.
    
-   
-## Examples
+## Example
 
-**1. Get data (webservice)**
+Get data from Relatics:
+
 ```python
 from pyrelatics import RelaticsAPI
 
 # Create a RelaticeAPI instance (prime connection)
 relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
 
-# Prepare parameters
+# Prepare (optional) parameters
 parameters=('dummy_parameter_name','dummy_parameter_value')
 
 # Get data (if there are no parameters don't pass it to the function)
 relaticsapi.GetResult('dummy_operation_name', 'dummy_entry_code', parameters=parameters)
 ```
+Import data into Relatics:
 
-**2. Create Instance Element, Update name and Create relation**
+```python
+from pyrelatics import RelaticsAPI
+
+# Create a RelaticeAPI instance (prime connection)
+relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
+
+# Prepare data
+data= [{'name': 'test', 'description':'descrtest'},{'name': 'test2', 'description':'descrtest2'}]
+
+# Import data
+relaticsapi.Import('dummy_operation_name','dummy_entry_code', data=data)
+```
+
+Create an instance of an Element, Update its name and create a relation
+with another instance Element:
 
 ```python
 from pyrelatics import RelaticsAPI
@@ -48,23 +65,13 @@ R2='dummy_R2'
 Relation = 'dummy_relation'
 relaticsapi.CreateInstanceRelation((R1, R2, Relation))
 ```
-
-
-**3. Import data (webservice)**
-
-```python
-from pyrelatics import RelaticsAPI
-
-# Create a RelaticeAPI instance (prime connection)
-relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
-
-# Prepare data
-data= [{'name': 'test', 'description':'descrtest'},{'name': 'test2', 'description':'descrtest2'}]
-
-# Import data
-relaticsapi.Import('dummy_operation_name','dummy_entry_code', data=data)
-```
-
-
-
 For all methods see the SOAP API in the knowledge base
+
+
+# Changelog
+
+**Version 0.20:**
+
+- Rename package to PyRelatics
+- 100% test coverage 
+- Python 3+ only
