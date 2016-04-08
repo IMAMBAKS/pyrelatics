@@ -1,7 +1,6 @@
 import pytest
 
 from pyrelatics.client import *
-import suds
 
 
 def test_relaticsapi_raise_exception_with_dummy_url():
