@@ -61,7 +61,7 @@ class RelaticsAPI:
         response = method_to_call(__inject={'msg': xml})
         return response
 
-    def GetResult(self, operation_name: str, entry_code: str, parameters: TYPINGS_ROW = 'None',
+    def GetResult(self, operation_name: str, entry_code: str, parameters: tuple_or_list_tuple = 'None',
                   retxml: bool = False) -> object:
         """
         retrieving data from Relatics
@@ -91,7 +91,7 @@ class RelaticsAPI:
             response = client.service.GetResult(__inject={'msg': xml})
             return response
 
-    def Import(self, operation_name: str, entry_code: str, data: TYPINGS_ROW, retxml=False) -> object:
+    def Import(self, operation_name: str, entry_code: str, data: dict_or_list_dict, retxml=False) -> object:
         """
         import data into Relatics; create and update data
 
