@@ -1,6 +1,6 @@
 import pytest
 
-from relatics_api.soap import *
+from relatics_api.client import *
 
 
 def test_relaticsapi_raise_exception_with_fake_url():

@@ -14,7 +14,7 @@ TYPINGS_PARAMETER = TypeVar('TYPINGS_PARAMETER', tuple, List[tuple])
 
 def validate_url(url: str):
     """
-    Returns url if exist otherwise fails
+    Returns url if exists otherwise raises Error
 
     :param str url: the url
     :return: url or error
@@ -45,6 +45,9 @@ def encode_data(non_encoded_data: str) -> str:
 def filter_pre_string(_string: str, lines_to_cut: int):
     """
     Filter the xml out of html
+
+    :type _string str:
+    :type lines_to_cut str:
     """
 
     filtered_array = _string.splitlines()[lines_to_cut:]
@@ -57,7 +60,7 @@ def unescape_html(s: str) -> str:
     """
     Unescape html
 
-    :param s str: create doc string
+    :param s: str
     :return: replaced string
     """
     s = s.replace('&lt;', '<')
@@ -72,9 +75,14 @@ def get_xml_for_method(method_url: str) -> str:
     """
     Get xml for specific method
     """
+    # Open url
     html_doc = urlopen(method_url)
     bs_obj = BeautifulSoup(html_doc, 'html.parser')
+
+    # Find xml part of the given method
     pre_string = unescape_html(bs_obj.find("pre").text)
+
+    # Filter xml
     xml_string = filter_pre_string(pre_string, 7)
     xml_string = re.sub(r'(?<=>)\s*?(?=<)', '', xml_string).strip()
     return xml_string
@@ -82,8 +90,9 @@ def get_xml_for_method(method_url: str) -> str:
 
 def create_parameter_xml(data: TYPINGS_PARAMETER) -> str:
     """
+    Return xml string for parameters
 
-    :param data Sequence[tuple]: [{}]
+    :param data:
     :return:
     """
     parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
@@ -98,6 +107,11 @@ def create_parameter_xml(data: TYPINGS_PARAMETER) -> str:
 
 
 def create_row_xml(data: TYPINGS_ROW):
+    """
+    Return xml string for row import data
+    :param data:
+    :return:
+    """
     total_string = '<Import>'
 
     if isinstance(data, List[Dict]):
