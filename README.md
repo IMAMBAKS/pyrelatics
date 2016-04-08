@@ -6,6 +6,8 @@ With this API a connection can be made to the Relatics database.
 
 - **Version: 0.15**
     - Python 2 support deprecated
+    - 100% test coverage
+    - 
     
 
 ### Example: RelaticsAPI ###

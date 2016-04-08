@@ -21,10 +21,10 @@ class RelaticsAPI:
         self.workspace_id = workspace_id
 
     def __repr__(self):
-        return 'This Object has the following parameters: ' \
-               'Company name: {}' \
-               'Environment ID: {}' \
-               'Workspace ID: {}' \
+        return 'This Object has the following parameters: \n' \
+               'Company name: {}\n' \
+               'Environment ID: {}\n' \
+               'Workspace ID: {}\n' \
                'Token: {}'.format(self.company_name, self.environment_id, self.workspace_id, self.token)
 
     def __getattr__(self, item):
@@ -44,7 +44,7 @@ class RelaticsAPI:
 
         url_method = WSDL_URLS[0] + self.company_name + WSDL_URLS[3] + self.method
 
-        if self.token is not None:
+        if isinstance(self.token, str):
             xml_definition = get_xml_for_method(url_method)
             if isinstance(data, tuple):
                 xml = str.encode(

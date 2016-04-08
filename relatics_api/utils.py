@@ -1,6 +1,7 @@
 import base64
 import re
-import urllib.request
+from urllib.error import HTTPError, URLError
+from urllib import request
 from functools import lru_cache
 from typing import List, Dict, TypeVar, Tuple
 from urllib.request import urlopen
@@ -9,7 +10,7 @@ from bs4 import BeautifulSoup
 
 # Typings
 dict_or_list_dict = TypeVar('TYPINGS_ROW', dict, List[dict])
-tuple_or_list_tuple = TypeVar('TYPINGS_PARAMETER', tuple, List[tuple])
+tuple_or_list_tuple = TypeVar('TYPINGS_PARAMETER', Tuple[str, str], List[Tuple[str, str]], str)
 
 
 def validate_url(url: str) -> str:
@@ -20,13 +21,11 @@ def validate_url(url: str) -> str:
     :return: url or error
     """
 
-    req = urllib.request.Request(url)
+    req = request.Request(url)
     try:
-        urllib.request.urlopen(req)
+        request.urlopen(req)
         return url
-    except urllib.request.HTTPError as e:
-        return url, "does not exist: ", e.code
-    except urllib.request.URLError as e:
+    except URLError as e:
         return url, "does not exist: ", e.reason
 
 
@@ -102,6 +101,8 @@ def create_parameter_xml(data: tuple_or_list_tuple) -> str:
             total_string += parameter_xml_string.format(parameter[0], parameter[1])
     elif isinstance(data, tuple):
         total_string += parameter_xml_string.format(data[0], data[1])
+    elif isinstance(data, str):
+        return ''
     else:
         raise TypeError('Please provide a tuple or list of tuple')
 
