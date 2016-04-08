@@ -1,6 +1,6 @@
 from suds.client import Client
 
-from relatics_api.utils import *
+from pyrelatics.utils import *
 
 WSDL_URLS = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",
              ".relaticsonline.com/api/relaticsapi.asmx?op=", ".relaticsonline.com/DataExchange.asmx?op=GetResult",

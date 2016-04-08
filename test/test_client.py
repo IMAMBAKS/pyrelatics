@@ -1,6 +1,6 @@
 import pytest
 
-from relatics_api.client import *
+from pyrelatics.client import *
 import suds
 
 

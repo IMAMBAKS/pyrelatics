@@ -24,7 +24,7 @@ __author__ = 'Rashied Imambaks'
 __copyright__ = "2015-2016, Rashied Imambaks"
 __email__ = "r@imambaks.nl"
 __license__ = "MIT"
-__package__ = "relatics_api"
+__package__ = "pyrelatics"
 
-from relatics_api.client import *
+from pyrelatics.client import *
 

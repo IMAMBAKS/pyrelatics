@@ -1,5 +1,5 @@
 import pytest
-from relatics_api.utils import *
+from pyrelatics.utils import *
 
 
 def test_validate_url():
