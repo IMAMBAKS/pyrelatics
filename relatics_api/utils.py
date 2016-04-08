@@ -2,17 +2,17 @@ import base64
 import re
 import urllib.request
 from functools import lru_cache
-from typing import List, Dict, TypeVar
+from typing import List, Dict, TypeVar, Tuple
 from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
 # Typings
-TYPINGS_ROW = TypeVar('TYPINGS_ROW', dict, List[dict])
-TYPINGS_PARAMETER = TypeVar('TYPINGS_PARAMETER', tuple, List[tuple])
+dict_or_list_dict = TypeVar('TYPINGS_ROW', dict, List[dict])
+tuple_or_list_tuple = TypeVar('TYPINGS_PARAMETER', tuple, List[tuple])
 
 
-def validate_url(url: str):
+def validate_url(url: str) -> str:
     """
     Returns url if exists otherwise raises Error
 
@@ -35,19 +35,19 @@ def encode_data(non_encoded_data: str) -> str:
     Encode a UTF-8 string.
 
     :param str non_encoded_data: The non encoded data.
-    :return: encoded_data object
+    :return: encoded_data string
     """
     data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
     data = data.decode(encoding='UTF-8')
     return data
 
 
-def filter_pre_string(_string: str, lines_to_cut: int):
+def filter_pre_string(_string: str, lines_to_cut: int) -> str:
     """
     Filter the xml out of html
 
-    :type _string str:
-    :type lines_to_cut str:
+    :param str _string:
+    :param int lines_to_cut:
     """
 
     filtered_array = _string.splitlines()[lines_to_cut:]
@@ -60,7 +60,7 @@ def unescape_html(s: str) -> str:
     """
     Unescape html
 
-    :param s: str
+    :param str s:
     :return: replaced string
     """
     s = s.replace('&lt;', '<')
@@ -88,25 +88,27 @@ def get_xml_for_method(method_url: str) -> str:
     return xml_string
 
 
-def create_parameter_xml(data: TYPINGS_PARAMETER) -> str:
+def create_parameter_xml(data: tuple_or_list_tuple) -> str:
     """
     Return xml string for parameters
 
-    :param data:
+    :param dict data:
     :return:
     """
     parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
     total_string = ''
-    if isinstance(data, list):
+    if isinstance(data, List[Tuple]):
         for parameter in data:
             total_string += parameter_xml_string.format(parameter[0], parameter[1])
-    else:
+    elif isinstance(data, tuple):
         total_string += parameter_xml_string.format(data[0], data[1])
+    else:
+        raise TypeError('Please provide a tuple or list of tuple')
 
     return total_string
 
 
-def create_row_xml(data: TYPINGS_ROW):
+def create_row_xml(data: dict_or_list_dict) -> str:
     """
     Return xml string for row import data
     :param data:
