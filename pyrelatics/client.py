@@ -1,5 +1,6 @@
-from suds.client import Client
+import warnings
 
+from suds.client import Client
 from pyrelatics.utils import *
 
 WSDL_URLS = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".relaticsonline.com/DataExchange.asmx?wsdl",
@@ -37,7 +38,10 @@ class RelaticsAPI:
         xml_definition = get_xml_for_method(url_method)
         xml = str.encode(xml_definition.format(username, password))
         response_login = client.service.Login(__inject={'msg': xml})
-        self.token = response_login
+        if isinstance(response_login, str):
+            self.token = response_login
+        else:
+            warnings.warn('login failed, please check username/password', Warning)
         return self.token
 
     def invoke_method(self, data):
