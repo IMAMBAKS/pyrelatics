@@ -51,3 +51,6 @@ def test_Import():
     relaticsapi = RelaticsAPI('kb', 'dummy_env_id', 'dummy_wid')
     relaticsapi.token = '123123'
     assert isinstance(relaticsapi.Import('dummy_operation', 'dummy', data=[]), object)
+
+
+# TODO test if user gets warning when login fails.
