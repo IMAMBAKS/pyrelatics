@@ -68,8 +68,8 @@ class RelaticsAPI:
 
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
-        :param tuple parameters: provide a list of tuples if there are more parameters
-        :param str retxml: If True return xml, otherwise return Object. default: false
+        :param tuple parameters: Provide a list of tuples if there are more parameters
+        :param bool retxml: If True return xml, otherwise return Object. default: false
 
         :return: soap data object
         """
@@ -91,13 +91,16 @@ class RelaticsAPI:
             response = client.service.GetResult(__inject={'msg': xml})
             return response
 
-    def Import(self, operation_name: str, entry_code: str, data: dict_or_list_dict, retxml=False) -> object:
+    def Import(self, operation_name: str, entry_code: str, data: dict_or_list_dict, retxml: bool=False) -> object:
         """
         import data into Relatics; create and update data
 
+
+
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
-        :param dict data: dictionary of imported data
+        :param dict data: Dictionary of imported data
+        :param bool retxml: If True return xml, otherwise return Object. default: false
         :return: soap data object imported data
         """
 
