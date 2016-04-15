@@ -63,7 +63,7 @@ Example
     data= [{'name': 'test', 'description':'descrtest'},{'name': 'test2', 'description':'descrtest2'}]
 
     # Import data
-    relaticsapi.Import('dummy_operation_name','dummy_entry_code', data=data)
+    relaticsapi.Import('dummy_operation_name', 'dummy_entry_code', data=data)
 
 
 =======================
@@ -78,7 +78,7 @@ Example
     from pyrelatics import RelaticsAPI
 
     # Create a RelaticeAPI instance (prime connection)
-    relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
+    relaticsapi = RelaticsAPI('company_name', 'environment_id', 'workspace_id')
 
     # Login to your environment
     relaticsapi.login('username', 'password')
@@ -90,7 +90,7 @@ Example
 
     R1=result
     R2='dummy_R2'
-    Relation = 'dummy_relation'
+    Relation ='dummy_relation'
     relaticsapi.CreateInstanceRelation((R1, R2, Relation))
 
 
