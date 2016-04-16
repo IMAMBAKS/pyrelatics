@@ -16,9 +16,9 @@ Install via pip:
 
     pip install pyrelatics
 
-===============
-Get Data (read)
-===============
+========
+Get data
+========
 
 .. automodule:: pyrelatics
 
@@ -43,7 +43,7 @@ Example
     relaticsapi.GetResult('dummy_operation_name', 'dummy_entry_code', parameters=parameters)
 
 ===========
-Import Data
+Import data
 ===========
 Sending data is done by an Import definition. If the data does not exist, new data will be created; otherwise updated.
 
@@ -92,8 +92,5 @@ Example
     R2='dummy_R2'
     Relation ='dummy_relation'
     relaticsapi.CreateInstanceRelation((R1, R2, Relation))
-
-
-
 
 
