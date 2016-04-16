@@ -11,6 +11,10 @@ WSDL_URLS = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".rela
 class RelaticsAPI:
     """
     This class simulates the Relatics API
+
+    :param str company_name: Name of the company
+    :param str environment_id: Environment ID
+    :param str workspace_id: Workspace ID
     """
 
     def __init__(self, company_name: str, environment_id: str, workspace_id: str):

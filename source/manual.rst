@@ -16,15 +16,30 @@ Install via pip:
 
     pip install pyrelatics
 
+================
+Prime connection
+================
+
+In order to prime a connection to the Relatics DB. First instantiate the relatics api class.
+
+.. autoclass:: pyrelatics.RelaticsAPI
+
+.. code-block:: python
+
+    from pyrelatics import RelaticsAPI
+
+    # Create a RelaticeAPI instance (prime connection)
+    relaticsapi = RelaticsAPI('company_name','environment_id', 'workspace_id')
+
+
 ========
 Get data
 ========
 
-.. automodule:: pyrelatics
 
 The following function can be used to read data in Relatics
 
-.. autoclass:: RelaticsAPI
+.. class:: pyrelatics.RelaticsAPI
     :members: GetResult
 
 Example
