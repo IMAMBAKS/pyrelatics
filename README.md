@@ -14,6 +14,14 @@ import data into relatics and invoke relatics_api methods.
    
 ## Example
 
+Prime connection to DB:
+```python
+from pyrelatics import RelaticsAPI
+
+# Create a RelaticeAPI instance (prime connection)
+relaticsapi = RelaticsAPI('company_name', 'environment_id', 'workspace_id')
+```
+
 Get data from Relatics:
 
 ```python

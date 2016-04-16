@@ -77,7 +77,7 @@ class RelaticsAPI:
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
         :param tuple parameters: Provide a list of tuples if there are more parameters
-        :param bool retxml: If True return xml, otherwise return Object. default: false
+        :param bool retxml: If True return xml, otherwise return Object, default: false
 
         :return: Object
         """
@@ -106,7 +106,7 @@ class RelaticsAPI:
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
         :param dict data: Dictionary of imported data
-        :param bool retxml: If True return xml, otherwise return Object. default: false
+        :param bool retxml: If True return xml, otherwise return Object, default: false
         :return: Object
         """
 
