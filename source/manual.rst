@@ -1,7 +1,7 @@
 Manual
 ======
 
-The following will be further elaborated:
+The following methods will be further elaborated:
 
     * Get data
     * Import data
