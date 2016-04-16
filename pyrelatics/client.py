@@ -10,7 +10,7 @@ WSDL_URLS = ("https://", ".relaticsonline.com/api/relaticsapi.asmx?WSDL", ".rela
 
 class RelaticsAPI:
     """
-    This class creates an object that simulates the Relatics API
+    This class simulates the Relatics API
     """
 
     def __init__(self, company_name: str, environment_id: str, workspace_id: str):
@@ -68,14 +68,14 @@ class RelaticsAPI:
     def GetResult(self, operation_name: str, entry_code: str, parameters: tuple_or_list_tuple = 'None',
                   retxml: bool = False) -> object:
         """
-        retrieving data from Relatics
+        Retrieving data from Relatics
 
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
         :param tuple parameters: Provide a list of tuples if there are more parameters
         :param bool retxml: If True return xml, otherwise return Object. default: false
 
-        :return: soap data object
+        :return: Object
         """
 
         method_url_SOAP = WSDL_URLS[0] + self.company_name + WSDL_URLS[2]
@@ -95,17 +95,15 @@ class RelaticsAPI:
             response = client.service.GetResult(__inject={'msg': xml})
             return response
 
-    def Import(self, operation_name: str, entry_code: str, data: dict_or_list_dict, retxml: bool=False) -> object:
+    def Import(self, operation_name: str, entry_code: str, data: dict_or_list_dict, retxml: bool = False) -> object:
         """
-        import data into Relatics; create and update data
-
-
+        Import data into Relatics
 
         :param str operation_name: The operation name of the webservice
         :param str entry_code: The entry-code of the webservice
         :param dict data: Dictionary of imported data
         :param bool retxml: If True return xml, otherwise return Object. default: false
-        :return: soap data object imported data
+        :return: Object
         """
 
         # WSDL URLS

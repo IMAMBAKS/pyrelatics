@@ -9,8 +9,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 # Typings
-dict_or_list_dict = TypeVar('TYPINGS_ROW', dict, List[dict])
-tuple_or_list_tuple = TypeVar('TYPINGS_PARAMETER', Tuple[str, str], List[Tuple[str, str]], str)
+dict_or_list_dict = TypeVar('ROWS', dict, List[dict])
+tuple_or_list_tuple = TypeVar('PARAMETER', Tuple[str, str], List[Tuple[str, str]], str)
 
 
 def validate_url(url: str) -> str:
@@ -34,7 +34,7 @@ def encode_data(non_encoded_data: str) -> str:
     Encode a UTF-8 string.
 
     :param str non_encoded_data: The non encoded data.
-    :return: encoded_data string
+    :return: str encoded_data string
     """
     data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
     data = data.decode(encoding='UTF-8')
@@ -74,6 +74,7 @@ def get_xml_for_method(method_url: str) -> str:
     """
     Get xml for specific method
     """
+
     # Open url
     html_doc = urlopen(method_url)
     bs_obj = BeautifulSoup(html_doc, 'html.parser')
