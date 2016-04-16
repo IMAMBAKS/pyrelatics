@@ -1,10 +1,10 @@
 import base64
 import re
-from urllib.error import HTTPError, URLError
+from urllib.error import URLError
 from urllib import request
+from urllib.request import urlopen
 from functools import lru_cache
 from typing import List, Dict, TypeVar, Tuple
-from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
@@ -15,7 +15,7 @@ tuple_or_list_tuple = TypeVar('PARAMETER', Tuple[str, str], List[Tuple[str, str]
 
 def validate_url(url: str) -> str:
     """
-    Returns url if exists otherwise raises Error
+    Return url if exists otherwise raises Error
 
     :param str url: the url
     :return: url or error
@@ -34,7 +34,7 @@ def encode_data(non_encoded_data: str) -> str:
     Encode a UTF-8 string.
 
     :param str non_encoded_data: The non encoded data.
-    :return: str encoded_data string
+    :return: encoded_data string
     """
     data = base64.b64encode(bytes(non_encoded_data, encoding='UTF-8'))
     data = data.decode(encoding='UTF-8')
@@ -59,7 +59,7 @@ def unescape_html(s: str) -> str:
     """
     Unescape html
 
-    :param str s:
+    :param str s: html-string
     :return: replaced string
     """
     s = s.replace('&lt;', '<')
@@ -93,7 +93,7 @@ def create_parameter_xml(data: tuple_or_list_tuple) -> str:
     Return xml string for parameters
 
     :param dict data:
-    :return:
+    :return str:
     """
     parameter_xml_string = '<Parameter Name="{}" Value="{}" />'
     total_string = ''
@@ -112,7 +112,8 @@ def create_parameter_xml(data: tuple_or_list_tuple) -> str:
 
 def create_row_xml(data: dict_or_list_dict) -> str:
     """
-    Return xml string for row import data
+    Return xml string for importing data
+
     :param data:
     :return:
     """
