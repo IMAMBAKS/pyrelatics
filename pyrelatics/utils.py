@@ -4,13 +4,8 @@ from urllib.error import URLError
 from urllib import request
 from urllib.request import urlopen
 from functools import lru_cache
-from typing import List, Dict, TypeVar, Tuple
-
+from pyrelatics.typings import *
 from bs4 import BeautifulSoup
-
-# Typings
-dict_or_list_dict = TypeVar('ROWS', dict, List[dict])
-tuple_or_list_tuple = TypeVar('PARAMETER', Tuple[str, str], List[Tuple[str, str]], str)
 
 
 def validate_url(url: str) -> str:
@@ -143,4 +138,8 @@ def create_row_xml(data: dict_or_list_dict) -> str:
 
 
 class RelaticsException(PermissionError):
+    pass
+
+
+if __name__ == '__main__':
     pass
