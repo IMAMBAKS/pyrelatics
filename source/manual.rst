@@ -24,8 +24,7 @@ In order to prime a connection to the Relatics DB. First instantiate the relatic
 
 .. autoclass:: pyrelatics.RelaticsAPI
 
-Example
--------
+
 .. code-block:: python
 
     from pyrelatics import RelaticsAPI
@@ -44,8 +43,7 @@ The following method can be used to read data from Relatics
 .. module:: pyrelatics
 .. automethod:: pyrelatics.RelaticsAPI.GetResult
 
-Example
--------
+
 .. code-block:: python
 
     from pyrelatics import RelaticsAPI
@@ -68,9 +66,6 @@ The following method can be used to import data to Relatics
 .. automethod:: pyrelatics.RelaticsAPI.Import
 
 
-Example
--------
-
 .. code-block:: python
 
     from pyrelatics import RelaticsAPI
@@ -90,8 +85,6 @@ Relatics API Operations
 =======================
 The following example shows how one can use an arbitrarily method from the relaticsapi:
 
-Example
--------
 .. code-block:: python
 
     from pyrelatics import RelaticsAPI
