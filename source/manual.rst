@@ -98,7 +98,7 @@ The following example shows how one can use an arbitrarily method from the relat
     # Create element and update it's name
     cor_element = 'dummy_element_ID'
     result = relaticsapi.CreateInstanceElement(cor_element).Element.ID
-    relaticsapi.UpdateInstanceElement(result,'name', 'nameOfResult')
+    relaticsapi.UpdateInstanceElement((result,'name', 'nameOfResult'))
 
     R1=result
     R2='dummy_R2'
