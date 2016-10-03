@@ -78,6 +78,11 @@ For all methods see the SOAP API in the knowledge base
 
 # Changelog
 
+**Version 0.21:**
+
+- Warning will shop up if user login fails
+- Wheel package now available
+
 **Version 0.20:**
 
 - Rename package to PyRelatics
