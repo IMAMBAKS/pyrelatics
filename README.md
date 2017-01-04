@@ -80,7 +80,7 @@ For all methods see the SOAP API in the knowledge base
 
 **Version 0.21:**
 
-- Warning will shop up if user login fails
+- Warning will show up if user login fails
 - Wheel package now available
 
 **Version 0.20:**
