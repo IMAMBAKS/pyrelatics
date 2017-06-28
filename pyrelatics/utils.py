@@ -57,7 +57,7 @@ def escape_html(s: str)-> str:
     :return: replaced html-string
     """
 	
-	s = s.replace('&','&amp;')
+    s = s.replace('&','&amp;')
     s = s.replace('<','&lt;')
     s = s.replace( '>','&gt;')
     s = s.replace('"','&quot;')
