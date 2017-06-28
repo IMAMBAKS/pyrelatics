@@ -49,6 +49,21 @@ def filter_pre_string(_string: str, lines_to_cut: int) -> str:
     filtered_string = filtered_string.strip()
     return filtered_string
 
+def escape_html(s: str)-> str:
+    """
+    Escape html
+
+    :param str s: string
+    :return: replaced html-string
+    """
+	
+	s = s.replace('&','&amp;')
+    s = s.replace('<','&lt;')
+    s = s.replace( '>','&gt;')
+    s = s.replace('"','&quot;')
+    s = s.replace("'", '&apos;')
+    return s
+
 
 def unescape_html(s: str) -> str:
     """
@@ -117,6 +132,7 @@ def create_row_xml(data: dict_or_list_dict) -> str:
     if isinstance(data, List[Dict]):
         for item in data:
             xml_string = '<Row'
+            item = {key: escape_html(str(value)) for key,value in item.items()}
             for key, value in item.items():
                 xml_string += ' {}="{}"'.format(key, value)
             xml_string += '/>'
@@ -126,6 +142,7 @@ def create_row_xml(data: dict_or_list_dict) -> str:
         return total_string
     elif isinstance(data, Dict):
         xml_string = '<Row'
+        data = {key: escape_html(str(value)) for key,value in data.items()}
         for key, value in data.items():
             xml_string += ' {}="{}"'.format(key, value)
         xml_string += '/>'
